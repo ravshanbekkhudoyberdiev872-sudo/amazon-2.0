@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function(){
+      try{
+        var t = localStorage.getItem('kl-theme');
+        if(t) document.documentElement.setAttribute('data-theme', t);
+      }catch(e){}
+    })();
+  </script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kicks Lab — New Drop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="store.css">
+<style>
+
+  a.icon-btn{ text-decoration:none; }
+  :root, :root[data-theme="dark"]{
+    --bg:#0E0E10;
+    --surface:#1A1A1D;
+    --surface-raised:#202023;
+    --border:#2C2C30;
+    --text:#F3F0E8;
+    --text-dim:#B9B6AE;
+    --accent:#FF3D1A;
+    --accent-dim:#3A1B12;
+    --accent-contrast:#0E0E10;
+    --accent-text:#FF5A3A;
+    --shadow:0 12px 28px rgba(0,0,0,0.35);
+    --radius-sm:3px;
+    --radius-pill:999px;
+    --sp-1:8px;
+    --sp-2:16px;
+    --sp-3:24px;
+    --sp-4:32px;
+    --sp-6:48px;
+    --sp-8:64px;
+    --sp-12:96px;
+  }
+
+  :root[data-theme="light"]{
+    --bg:#F7F5F0;
+    --surface:#FFFFFF;
+    --surface-raised:#FFFFFF;
+    --border:#E3DFD5;
+    --text:#161512;
+    --text-dim:#6E6A61;
+    --accent:#FF3D1A;
+    --accent-dim:#FFE1D8;
+    --accent-contrast:#0E0E10;
+    --accent-text:#D42A0A;
+    --shadow:0 12px 28px rgba(20,18,14,0.08);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    transition:background 0.2s ease, color 0.2s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  :focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  .display{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    letter-spacing:0.005em;
+    line-height:0.92;
+  }
+
+  /* ---------- marquee strip ---------- */
+  .marquee{
+    background:var(--accent);
+    color:var(--accent-contrast);
+    overflow:hidden;
+    white-space:nowrap;
+    border-bottom:1px solid var(--bg);
+  }
+  .marquee-track{
+    display:inline-flex;
+    animation:scroll 22s linear infinite;
+  }
+  .marquee span{
+    font-weight:800;
+    font-size:13px;
+    letter-spacing:0.04em;
+    padding:9px var(--sp-3);
+    white-space:nowrap;
+  }
+  .marquee span::after{
+    content:"//";
+    margin-left:var(--sp-3);
+    opacity:0.55;
+  }
+  @keyframes scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* ---------- nav ---------- */
+  header.nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:var(--sp-3) var(--sp-6);
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:40;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+  }
+  .logo{
+    font-family:'Anton',sans-serif;
+    font-size:22px;
+    letter-spacing:0.01em;
+    display:flex;
+    align-items:baseline;
+    gap:2px;
+  }
+  .logo .dot{color:var(--accent);transition:transform 0.2s ease;display:inline-block;}
+  .logo:hover .dot{transform:scale(1.4);}
+
+  .nav-links{
+    display:flex;
+    gap:var(--sp-6);
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  .nav-links a{
+    font-size:14px;
+    font-weight:600;
+    color:var(--text-dim);
+    position:relative;
+    padding:4px 2px;
+    transition:color 0.15s ease;
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a::before{
+    content:"";
+    position:absolute;
+    left:0;right:0;
+    bottom:-2px;
+    height:2px;
+    background:var(--text-dim);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform 0.25s ease, background 0.15s ease;
+  }
+  .nav-links a:hover::before{transform:scaleX(1);}
+  .nav-links a.sale::before{background:var(--accent);}
+  .nav-links a.active{color:var(--text);}
+  .nav-links a.active::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;
+    bottom:-2px;
+    height:2px;
+    background:var(--accent);
+  }
+  .nav-links a.sale{color:var(--accent);}
+  .nav-links a.sale:hover{color:#ff6a48;}
+
+  .nav-actions{
+    display:flex;
+    align-items:center;
+    gap:var(--sp-3);
+  }
+  .icon-btn{
+    background:none;
+    border:none;
+    color:var(--text);
+    padding:6px;
+    display:flex;
+    position:relative;
+    border-radius:var(--radius-sm);
+  }
+  .icon-btn:hover{color:var(--accent);}
+  .theme-toggle .icon-moon{display:none;}
+  :root[data-theme="light"] .theme-toggle .icon-sun{display:none;}
+  :root[data-theme="light"] .theme-toggle .icon-moon{display:block;}
+  .cart-badge{
+    position:absolute;
+    top:-2px;
+    right:-4px;
+    background:var(--accent);
+    color:var(--accent-contrast);
+    font-size:10px;
+    font-weight:800;
+    min-width:16px;
+    height:16px;
+    border-radius:var(--radius-pill);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 3px;
+    border:1.5px solid var(--bg);
+  }
+
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:none;
+    color:var(--text);
+    padding:6px;
+  }
+
+  /* ---------- hero ---------- */
+  @keyframes heroRise{
+    from{opacity:0; transform:translateY(16px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .hero{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    min-height:640px;
+  }
+  .hero-copy{
+    padding:var(--sp-12) var(--sp-6) var(--sp-8);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:var(--sp-4);
+    max-width:640px;
+  }
+  .hero-kicker{
+    font-size:13px;
+    font-weight:700;
+    color:var(--accent);
+    letter-spacing:0.03em;
+    animation:heroRise 0.6s ease both;
+  }
+  .hero-headline{
+    font-size:clamp(48px, 6.4vw, 92px);
+    color:var(--text);
+    animation:heroRise 0.6s ease 0.08s both;
+  }
+  .hero-headline .accent{
+    color:var(--accent);
+  }
+  .hero-sub{
+    font-size:17px;
+    line-height:1.55;
+    color:var(--text-dim);
+    max-width:46ch;
+    animation:heroRise 0.6s ease 0.18s both;
+  }
+  .hero-actions{
+    display:flex;
+    align-items:center;
+    gap:var(--sp-4);
+    margin-top:var(--sp-2);
+    animation:heroRise 0.6s ease 0.26s both;
+  }
+  .btn-primary{
+    position:relative;
+    overflow:hidden;
+    background:var(--accent);
+    color:var(--accent-contrast);
+    border:none;
+    font-weight:800;
+    font-size:15px;
+    padding:16px 30px;
+    border-radius:var(--radius-sm);
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .btn-primary::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-60%;
+    width:40%;
+    height:100%;
+    background:linear-gradient(115deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform:skewX(-20deg);
+    transition:left 0.5s ease;
+  }
+  .btn-primary:hover::before{left:130%;}
+  .btn-primary:hover{
+    background:#ff5636;
+    transform:translateY(-2px);
+  }
+  .btn-primary:active{transform:translateY(0) scale(0.98);}
+  .hero-meta{
+    font-size:13px;
+    color:var(--text-dim);
+    font-weight:600;
+  }
+  .hero-meta strong{color:var(--text);}
+
+  .hero-visual{
+    position:relative;
+    background:#1A1A1D;
+    clip-path:polygon(14% 0, 100% 0, 100% 100%, 0% 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .hero-visual::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      radial-gradient(circle at 70% 20%, rgba(255,61,26,0.35), transparent 55%),
+      linear-gradient(180deg, #1a1a1d 0%, #101012 100%);
+  }
+  .hero-visual img{
+    position:relative;
+    width:92%;
+    max-width:520px;
+    transform:rotate(-8deg);
+    filter:drop-shadow(0 30px 40px rgba(0,0,0,0.55));
+  }
+  .hero-price-tag{
+    position:absolute;
+    bottom:var(--sp-6);
+    right:var(--sp-6);
+    background:#0E0E10;
+    border:1px solid #2C2C30;
+    padding:var(--sp-2) var(--sp-3);
+    border-radius:var(--radius-sm);
+    text-align:right;
+  }
+  .hero-price-tag .label{
+    display:block;
+    font-size:11px;
+    color:#B9B6AE;
+    font-weight:600;
+  }
+  .hero-price-tag .value{
+    display:block;
+    font-family:'Anton',sans-serif;
+    font-size:20px;
+    color:var(--accent);
+  }
+
+  /* ---------- category tiles ---------- */
+  .categories{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+  }
+  .category-tile{
+    position:relative;
+    aspect-ratio:3/4;
+    overflow:hidden;
+    border-right:1px solid var(--bg);
+    display:flex;
+    align-items:flex-end;
+  }
+  .category-tile:last-child{border-right:none;}
+  .category-tile img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    filter:grayscale(0.15) brightness(0.75);
+    transform:scale(1.02);
+    transition:transform 0.5s ease, filter 0.5s ease;
+  }
+  .category-tile::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(14,14,16,0) 40%, rgba(14,14,16,0.9) 100%);
+  }
+  .category-tile:hover img{
+    transform:scale(1.09);
+    filter:grayscale(0) brightness(0.85);
+  }
+  .category-content{
+    position:relative;
+    z-index:1;
+    padding:var(--sp-4);
+    width:100%;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:var(--sp-2);
+  }
+  .category-name{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(26px, 3vw, 34px);
+    color:var(--text);
+    line-height:1;
+    display:block;
+    transition:transform 0.3s ease;
+  }
+  .category-tile:hover .category-name{transform:translateY(-2px);}
+  .category-tile:nth-child(2) .category-name{color:var(--accent);}
+  .category-text{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    overflow:hidden;
+  }
+  .category-cue{
+    font-size:12px;
+    font-weight:700;
+    color:var(--accent);
+    letter-spacing:0.02em;
+    opacity:0;
+    transform:translateY(6px);
+    transition:opacity 0.25s ease, transform 0.25s ease;
+  }
+  .category-tile:hover .category-cue{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .category-arrow{
+    width:34px;
+    height:34px;
+    min-width:34px;
+    border-radius:var(--radius-pill);
+    border:1.5px solid var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--text);
+    transition:background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.3s ease;
+  }
+  .category-tile:hover .category-arrow{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:var(--accent-contrast);
+    transform:rotate(45deg);
+  }
+
+  /* ---------- strip below hero: quick categories ---------- */
+  .quicklinks{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+  }
+  .quicklinks a{
+    padding:var(--sp-3) var(--sp-4);
+    font-size:14px;
+    font-weight:600;
+    color:var(--text-dim);
+    border-right:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .quicklinks a:last-child{border-right:none;}
+  .quicklinks a:hover{background:var(--surface);color:var(--text);}
+  .quicklinks a span.arrow{color:var(--accent);display:inline-block;transition:transform 0.2s ease;}
+  .quicklinks a:hover span.arrow{transform:translate(3px, -3px);}
+
+  /* ---------- new arrivals ---------- */
+  .arrivals{
+    padding:var(--sp-8) var(--sp-6);
+  }
+  .arrivals-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:var(--sp-4);
+    gap:var(--sp-3);
+  }
+  .arrivals-title{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(28px, 3.4vw, 40px);
+    color:var(--text);
+  }
+  .arrivals-link{
+    font-size:14px;
+    font-weight:700;
+    color:var(--text-dim);
+    white-space:nowrap;
+  }
+  .arrivals-link:hover{color:var(--accent);}
+
+  .product-row{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:var(--sp-3);
+  }
+  .sr-only{
+    position:absolute;
+    width:1px;height:1px;
+    margin:-1px;padding:0;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+  }
+
+  .product-card{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    transition:transform 0.28s cubic-bezier(0.22, 0.8, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+  }
+  .product-media{
+    position:relative;
+    aspect-ratio:1/1;
+    background:var(--surface-raised);
+    border-radius:2px 2px 0 0;
+    overflow:hidden;
+  }
+  .product-media img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transition:transform 0.5s ease;
+  }
+
+  /* badge: Sale is the accent (matches the Sale nav link), New is the neutral inverse */
+  .product-badge{
+    position:absolute;
+    top:var(--sp-1);
+    left:var(--sp-1);
+    z-index:2;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:0.02em;
+    line-height:1;
+    padding:5px 9px;
+    border-radius:var(--radius-sm);
+  }
+  .product-badge.is-sale{background:var(--accent);color:var(--accent-contrast);}
+  .product-badge.is-new{background:var(--text);color:var(--bg);}
+
+  /* save (heart) */
+  .save-btn{
+    position:absolute;
+    top:var(--sp-1);
+    right:var(--sp-1);
+    z-index:2;
+    width:36px;
+    height:36px;
+    padding:0;
+    border:none;
+    border-radius:var(--radius-pill);
+    display:grid;
+    place-items:center;
+    color:var(--text);
+    background:color-mix(in srgb, var(--bg) 68%, transparent);
+    -webkit-backdrop-filter:blur(8px);
+    backdrop-filter:blur(8px);
+    transition:background 0.15s ease, color 0.15s ease;
+  }
+  .save-btn svg{display:block;}
+  .save-btn svg path{
+    fill:transparent;
+    stroke:currentColor;
+    stroke-width:2;
+    stroke-linejoin:round;
+    transition:fill 0.15s ease;
+  }
+  .save-btn:hover{
+    color:var(--accent);
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+  }
+  .save-btn[aria-pressed="true"]{color:var(--accent);}
+  .save-btn[aria-pressed="true"] svg path{fill:currentColor;}
+  .save-btn.pop svg{animation:heartPop 0.35s ease;}
+  @keyframes heartPop{
+    0%{transform:scale(1);}
+    40%{transform:scale(1.3);}
+    100%{transform:scale(1);}
+  }
+
+  /* quick add: hidden until the card is hovered or keyboard-focused */
+  .quick-add{
+    position:absolute;
+    left:var(--sp-1);
+    right:var(--sp-1);
+    bottom:var(--sp-1);
+    z-index:2;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    border:none;
+    border-radius:var(--radius-sm);
+    background:var(--text);
+    color:var(--bg);
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:0.01em;
+    opacity:0;
+    transform:translateY(10px);
+    pointer-events:none;
+    transition:opacity 0.2s ease, transform 0.28s cubic-bezier(0.22, 0.8, 0.3, 1), background 0.15s ease, color 0.15s ease;
+  }
+  .quick-add svg{display:block;}
+  .quick-add:hover,
+  .quick-add:focus-visible,
+  .quick-add.added{
+    background:var(--accent);
+    color:var(--accent-contrast);
+  }
+  .quick-add:focus-visible{outline-offset:2px;}
+
+  /* card lift + tinted shadow */
+  @media (hover:hover){
+    .product-card:hover{
+      transform:translateY(-5px);
+      border-color:color-mix(in srgb, var(--accent) 32%, var(--border));
+      box-shadow:
+        0 22px 34px -18px color-mix(in srgb, var(--accent) 38%, transparent),
+        0 4px 12px -4px color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+    .product-card:hover .product-media img{transform:scale(1.05);}
+    .product-card:hover .quick-add{
+      opacity:1;
+      transform:translateY(0);
+      pointer-events:auto;
+    }
+  }
+  .product-card:has(:focus-visible){
+    transform:translateY(-5px);
+    border-color:color-mix(in srgb, var(--accent) 32%, var(--border));
+    box-shadow:
+      0 22px 34px -18px color-mix(in srgb, var(--accent) 38%, transparent),
+      0 4px 12px -4px color-mix(in srgb, var(--accent) 14%, transparent);
+  }
+  .product-card:has(:focus-visible) .quick-add{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  /* no hover on touch screens: keep Quick Add visible */
+  @media (hover:none){
+    .quick-add{
+      opacity:1;
+      transform:none;
+      pointer-events:auto;
+      height:38px;
+    }
+  }
+
+  /* text */
+  .product-info{
+    display:flex;
+    flex-direction:column;
+    gap:var(--sp-1);
+    padding:var(--sp-2);
+  }
+  .product-link{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  /* the whole card is one click target; heart and Quick Add sit above it */
+  .product-link::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:1;
+  }
+  .product-link:focus-visible{outline:none;}
+  .product-card:has(.product-link:focus-visible){
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+  .product-brand{
+    font-size:12px;
+    font-weight:600;
+    color:var(--text-dim);
+  }
+  .product-name{
+    font-size:15px;
+    font-weight:700;
+    line-height:1.25;
+    color:var(--text);
+  }
+  .product-price{
+    display:flex;
+    align-items:baseline;
+    gap:var(--sp-1);
+    font-size:15px;
+    font-weight:700;
+    color:var(--text);
+  }
+  .product-price.on-sale .now{color:var(--accent-text);}
+  .product-price .was{
+    font-size:13px;
+    font-weight:500;
+    color:var(--text-dim);
+    text-decoration:line-through;
+  }
+
+  @media (max-width:560px){
+    .product-info{padding:12px;}
+    .product-name{font-size:14px;}
+    .product-price{font-size:14px;}
+  }
+
+  /* ---------- trust badges ---------- */
+  .trust{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    background:var(--surface);
+  }
+  .trust-item{
+    display:flex;
+    align-items:center;
+    gap:var(--sp-2);
+    padding:var(--sp-4) var(--sp-4);
+    border-right:1px solid var(--border);
+  }
+  .trust-item:last-child{border-right:none;}
+  .trust-icon{
+    width:38px;
+    height:38px;
+    min-width:38px;
+    border-radius:var(--radius-pill);
+    background:var(--accent-dim);
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:transform 0.2s ease;
+  }
+  .trust-item:hover .trust-icon{transform:scale(1.1);}
+  .trust-text{
+    font-size:14px;
+    font-weight:700;
+    color:var(--text);
+    line-height:1.3;
+  }
+
+  /* ---------- footer ---------- */
+  footer.site-footer{
+    padding:var(--sp-8) var(--sp-6) var(--sp-4);
+  }
+  .footer-top{
+    display:grid;
+    grid-template-columns:1.4fr 2fr 1.4fr;
+    gap:var(--sp-6);
+    padding-bottom:var(--sp-8);
+  }
+  .footer-brand .logo{margin-bottom:var(--sp-2);}
+  .footer-tagline{
+    font-size:14px;
+    color:var(--text-dim);
+    max-width:32ch;
+    line-height:1.5;
+  }
+  .footer-links{
+    display:flex;
+    gap:var(--sp-8);
+  }
+  .footer-col h3{
+    font-size:12px;
+    font-weight:700;
+    color:var(--text-dim);
+    margin:0 0 var(--sp-2);
+    letter-spacing:0.02em;
+  }
+  .footer-col ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:var(--sp-1);
+  }
+  .footer-col a{
+    font-size:14px;
+    font-weight:600;
+    color:var(--text);
+  }
+  .footer-col a:hover{color:var(--accent);}
+
+  .footer-newsletter h3{
+    font-size:12px;
+    font-weight:700;
+    color:var(--text-dim);
+    margin:0 0 var(--sp-2);
+    letter-spacing:0.02em;
+  }
+  .footer-newsletter p{
+    font-size:14px;
+    color:var(--text-dim);
+    margin:0 0 var(--sp-2);
+    line-height:1.5;
+  }
+  .newsletter-form{
+    display:flex;
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    overflow:hidden;
+    background:var(--surface);
+  }
+  .newsletter-form input{
+    flex:1;
+    background:none;
+    border:none;
+    color:var(--text);
+    font-family:inherit;
+    font-size:14px;
+    padding:12px 14px;
+    min-width:0;
+  }
+  .newsletter-form input::placeholder{color:var(--text-dim);}
+  .newsletter-form input:focus{outline:none;}
+  .newsletter-form button{
+    background:var(--accent);
+    color:var(--accent-contrast);
+    border:none;
+    font-weight:800;
+    font-size:13px;
+    padding:0 18px;
+    white-space:nowrap;
+  }
+  .newsletter-form button:hover{background:#ff5636;}
+
+  .footer-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:var(--sp-3);
+    padding-top:var(--sp-4);
+    border-top:1px solid var(--border);
+  }
+  .footer-copy{
+    font-size:13px;
+    color:var(--text-dim);
+  }
+  .social-icons{
+    display:flex;
+    gap:var(--sp-2);
+  }
+  .social-icons a{
+    width:34px;
+    height:34px;
+    border-radius:var(--radius-pill);
+    border:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--text);
+    transition:border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+  .social-icons a:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+    transform:translateY(-2px);
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:900px){
+    .nav-links{
+      position:absolute;
+      top:100%;left:0;right:0;
+      background:var(--bg);
+      flex-direction:column;
+      gap:0;
+      border-bottom:1px solid var(--border);
+      display:none;
+    }
+    .nav-links.open{display:flex;}
+    .nav-links a{padding:var(--sp-2) var(--sp-6);width:100%;}
+    .nav-links a.active::after{display:none;}
+    .nav-toggle{display:block;}
+    .hero{grid-template-columns:1fr;}
+    .hero-visual{
+      clip-path:none;
+      min-height:360px;
+      order:-1;
+    }
+    .hero-copy{padding:var(--sp-6) var(--sp-4);}
+    .arrivals{padding:var(--sp-6) var(--sp-4);}
+    .product-row{grid-template-columns:repeat(2, 1fr);gap:var(--sp-3) var(--sp-2);}
+    .categories{grid-template-columns:1fr;}
+    .trust{grid-template-columns:1fr;}
+    .trust-item{border-right:none;border-bottom:1px solid var(--border);}
+    .trust-item:last-child{border-bottom:none;}
+    .footer-top{grid-template-columns:1fr;gap:var(--sp-6);}
+    .footer-links{gap:var(--sp-4);}
+    .footer-bottom{flex-direction:column;align-items:flex-start;gap:var(--sp-3);}
+    .category-tile{
+      aspect-ratio:16/10;
+      border-right:none;
+      border-bottom:1px solid var(--bg);
+    }
+    .quicklinks{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>NEW DROP — SATURDAY 9AM ET</span>
+      <span>LIMITED TO 400 PAIRS</span>
+      <span>MEMBERS GET EARLY ACCESS</span>
+      <span>NEW DROP — SATURDAY 9AM ET</span>
+      <span>LIMITED TO 400 PAIRS</span>
+      <span>MEMBERS GET EARLY ACCESS</span>
+    </div>
+  </div>
+
+  <header class="nav">
+    <a href="index.html" class="logo">KICKS<span class="dot">.</span>LAB</a>
+
+    <button class="nav-toggle" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+
+    <!--
+      Department links point to the Shop page with a `dept` query param
+      (men / women / new / sale). shop.html doesn't read this param yet —
+      when wiring up real filtering, parse it on load and pre-check the
+      matching Brand/Category filter(s) plus update the results count.
+    -->
+    <ul class="nav-links">
+      <li><a href="shop.html?dept=men" class="active">Men</a></li>
+      <li><a href="shop.html?dept=women">Women</a></li>
+      <li><a href="shop.html?dept=new">New Drops</a></li>
+      <li><a href="shop.html?dept=sale" class="sale">Sale</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="icon-btn theme-toggle" aria-label="Toggle light and dark mode" onclick="toggleTheme()">
+        <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="account-wrap">
+        <button class="icon-btn account-btn" id="account-btn" aria-haspopup="true" aria-expanded="false" aria-label="Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.2" r="3.6" stroke="currentColor" stroke-width="2"/><path d="M4.4 19.6c1.3-3.9 4.1-5.9 7.6-5.9s6.3 2 7.6 5.9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="account-panel" id="account-panel" hidden></div>
+      </div>
+      <a href="favorites.html" class="icon-btn" aria-label="Favorites, 0 items">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <span class="fav-badge">0</span>
+      </a>
+      <a href="cart.html" class="icon-btn" aria-label="Cart, 0 items">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 8h12l-1.2 10.2a2 2 0 01-2 1.8H9.2a2 2 0 01-2-1.8L6 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="2"/></svg>
+        <span class="cart-badge">0</span>
+      </a>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <span class="hero-kicker">FALL DROP 004</span>
+      <h1 class="hero-headline">
+        RUN<br>WITH THE<br><span class="accent">UNRELEASED.</span>
+      </h1>
+      <p class="hero-sub">The Voltage Mid lands in four colorways this Saturday. Reflective overlays, foam that actually rebounds, and a heel tab nobody else has yet.</p>
+      <div class="hero-actions">
+        <button class="btn-primary">Shop the Drop</button>
+        <span class="hero-meta">Drops in <strong>3d : 14h : 02m</strong></span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1200&auto=format&fit=crop" alt="Voltage Mid sneaker, angled studio shot">
+      <div class="hero-price-tag">
+        <span class="label">Voltage Mid</span>
+        <span class="value">$189</span>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    Each tile links to the Shop page with a `category` query param
+    (running / basketball / lifestyle). shop.html's filter sidebar only
+    has Brand/Size/Price/Color right now — no Category filter exists yet.
+    To wire this up: add a Category filter group to shop.html, then on
+    load parse `category` from the URL, check the matching box, and
+    scope the results grid + count to it.
+  -->
+  <section class="categories" aria-label="Shop by category">
+    <a class="category-tile" href="shop.html?category=running">
+      <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=900&auto=format&fit=crop" alt="Running shoe on track">
+      <div class="category-content">
+        <div class="category-text">
+          <span class="category-name">Running</span>
+          <span class="category-cue">Shop the edit</span>
+        </div>
+        <span class="category-arrow" aria-hidden="true">↗</span>
+      </div>
+    </a>
+    <a class="category-tile" href="shop.html?category=basketball">
+      <img src="https://images.unsplash.com/photo-1519861531473-9200262188bf?q=80&w=900&auto=format&fit=crop" alt="Basketball sneaker on court">
+      <div class="category-content">
+        <div class="category-text">
+          <span class="category-name">Basketball</span>
+          <span class="category-cue">Shop the edit</span>
+        </div>
+        <span class="category-arrow" aria-hidden="true">↗</span>
+      </div>
+    </a>
+    <a class="category-tile" href="shop.html?category=lifestyle">
+      <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=900&auto=format&fit=crop" alt="Lifestyle streetwear sneaker">
+      <div class="category-content">
+        <div class="category-text">
+          <span class="category-name">Lifestyle</span>
+          <span class="category-cue">Shop the edit</span>
+        </div>
+        <span class="category-arrow" aria-hidden="true">↗</span>
+      </div>
+    </a>
+  </section>
+
+  <nav class="quicklinks" aria-label="Quick category links">
+    <a href="#">Sneakers <span class="arrow">↗</span></a>
+    <a href="#">Outerwear <span class="arrow">↗</span></a>
+    <a href="#">Accessories <span class="arrow">↗</span></a>
+    <a href="#">Archive <span class="arrow">↗</span></a>
+  </nav>
+
+  <section class="arrivals" aria-label="New arrivals">
+    <div class="arrivals-head">
+      <h2 class="arrivals-title">New Arrivals</h2>
+      <a href="#" class="arrivals-link">View all ↗</a>
+    </div>
+    <div class="product-row">
+      <article class="product-card kl-reveal" data-id="nova-runner" data-brand="RVLT" data-name="Nova Runner" data-price="140" data-image="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop" data-href="product-nova-runner.html">
+        <div class="product-media">
+          <span class="product-badge is-new">New</span>
+          <button type="button" class="save-btn" aria-pressed="false" aria-label="Save RVLT Nova Runner">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop" alt="RVLT Nova Runner sneaker" loading="lazy">
+          <button type="button" class="quick-add" data-product="RVLT Nova Runner">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span class="quick-add-label">Quick Add</span><span class="sr-only"> RVLT Nova Runner</span>
+          </button>
+        </div>
+        <div class="product-info">
+          <a class="product-link" href="product-nova-runner.html">
+            <span class="product-brand">RVLT</span>
+            <span class="product-name">Nova Runner</span>
+          </a>
+          <div class="product-price"><span class="sr-only">Price </span><span class="now">$140</span></div>
+        </div>
+      </article>
+
+      <article class="product-card kl-reveal" data-id="adidas-samba-og" data-brand="Adidas" data-name="Samba OG" data-price="100" data-image="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?q=80&w=600&auto=format&fit=crop" data-href="shop.html">
+        <div class="product-media">
+          <button type="button" class="save-btn" aria-pressed="false" aria-label="Save Adidas Samba OG">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?q=80&w=600&auto=format&fit=crop" alt="Adidas Samba OG sneaker" loading="lazy">
+          <button type="button" class="quick-add" data-product="Adidas Samba OG">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span class="quick-add-label">Quick Add</span><span class="sr-only"> Adidas Samba OG</span>
+          </button>
+        </div>
+        <div class="product-info">
+          <a class="product-link" href="shop.html">
+            <span class="product-brand">Adidas</span>
+            <span class="product-name">Samba OG</span>
+          </a>
+          <div class="product-price"><span class="sr-only">Price </span><span class="now">$100</span></div>
+        </div>
+      </article>
+
+      <article class="product-card kl-reveal" data-id="new-balance-550" data-brand="New Balance" data-name="550" data-price="104" data-image="https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=600&auto=format&fit=crop" data-href="shop.html">
+        <div class="product-media">
+          <span class="product-badge is-sale">Sale</span>
+          <button type="button" class="save-btn" aria-pressed="false" aria-label="Save New Balance 550">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5?q=80&w=600&auto=format&fit=crop" alt="New Balance 550 sneaker" loading="lazy">
+          <button type="button" class="quick-add" data-product="New Balance 550">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span class="quick-add-label">Quick Add</span><span class="sr-only"> New Balance 550</span>
+          </button>
+        </div>
+        <div class="product-info">
+          <a class="product-link" href="shop.html">
+            <span class="product-brand">New Balance</span>
+            <span class="product-name">550</span>
+          </a>
+          <div class="product-price on-sale">
+            <span class="sr-only">Sale price </span><span class="now">$104</span>
+            <span class="sr-only">Original price </span><s class="was">$130</s>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card kl-reveal" data-id="jordan-air-jordan-1-high-og" data-brand="Jordan" data-name="Air Jordan 1 High OG" data-price="180" data-image="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=600&auto=format&fit=crop" data-href="shop.html">
+        <div class="product-media">
+          <span class="product-badge is-new">New</span>
+          <button type="button" class="save-btn" aria-pressed="false" aria-label="Save Jordan Air Jordan 1 High OG">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=600&auto=format&fit=crop" alt="Jordan Air Jordan 1 High OG sneaker" loading="lazy">
+          <button type="button" class="quick-add" data-product="Jordan Air Jordan 1 High OG">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span class="quick-add-label">Quick Add</span><span class="sr-only"> Jordan Air Jordan 1 High OG</span>
+          </button>
+        </div>
+        <div class="product-info">
+          <a class="product-link" href="shop.html">
+            <span class="product-brand">Jordan</span>
+            <span class="product-name">Air Jordan 1 High OG</span>
+          </a>
+          <div class="product-price"><span class="sr-only">Price </span><span class="now">$180</span></div>
+        </div>
+      </article>
+
+      <article class="product-card kl-reveal" data-id="asics-gel-kayano-14" data-brand="ASICS" data-name="Gel-Kayano 14" data-price="150" data-image="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=600&auto=format&fit=crop" data-href="shop.html">
+        <div class="product-media">
+          <button type="button" class="save-btn" aria-pressed="false" aria-label="Save ASICS Gel-Kayano 14">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <img src="https://images.unsplash.com/photo-1460353581641-37baddab0fa2?q=80&w=600&auto=format&fit=crop" alt="ASICS Gel-Kayano 14 sneaker" loading="lazy">
+          <button type="button" class="quick-add" data-product="ASICS Gel-Kayano 14">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span class="quick-add-label">Quick Add</span><span class="sr-only"> ASICS Gel-Kayano 14</span>
+          </button>
+        </div>
+        <div class="product-info">
+          <a class="product-link" href="shop.html">
+            <span class="product-brand">ASICS</span>
+            <span class="product-name">Gel-Kayano 14</span>
+          </a>
+          <div class="product-price"><span class="sr-only">Price </span><span class="now">$150</span></div>
+        </div>
+      </article>
+
+      <article class="product-card kl-reveal" data-id="puma-speedcat-og" data-brand="Puma" data-name="Speedcat OG" data-price="75" data-image="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=600&auto=format&fit=crop" data-href="shop.html">
+        <div class="product-media">
+          <span class="product-badge is-sale">Sale</span>
+          <button type="button" class="save-btn" aria-pressed="false" aria-label="Save Puma Speedcat OG">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=600&auto=format&fit=crop" alt="Puma Speedcat OG sneaker" loading="lazy">
+          <button type="button" class="quick-add" data-product="Puma Speedcat OG">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span class="quick-add-label">Quick Add</span><span class="sr-only"> Puma Speedcat OG</span>
+          </button>
+        </div>
+        <div class="product-info">
+          <a class="product-link" href="shop.html">
+            <span class="product-brand">Puma</span>
+            <span class="product-name">Speedcat OG</span>
+          </a>
+          <div class="product-price on-sale">
+            <span class="sr-only">Sale price </span><span class="now">$75</span>
+            <span class="sr-only">Original price </span><s class="was">$100</s>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card kl-reveal" data-id="lab-hoodie" data-brand="KICKS LAB" data-name="Lab Hoodie" data-price="65" data-image="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=600&auto=format&fit=crop" data-href="product-lab-hoodie.html">
+        <div class="product-media">
+          <span class="product-badge is-new">New</span>
+          <button type="button" class="save-btn" aria-pressed="false" aria-label="Save KICKS LAB Lab Hoodie">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=600&auto=format&fit=crop" alt="KICKS LAB Lab Hoodie" loading="lazy">
+          <button type="button" class="quick-add" data-product="KICKS LAB Lab Hoodie">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span class="quick-add-label">Quick Add</span><span class="sr-only"> KICKS LAB Lab Hoodie</span>
+          </button>
+        </div>
+        <div class="product-info">
+          <a class="product-link" href="product-lab-hoodie.html">
+            <span class="product-brand">KICKS LAB</span>
+            <span class="product-name">Lab Hoodie</span>
+          </a>
+          <div class="product-price"><span class="sr-only">Price </span><span class="now">$65</span></div>
+        </div>
+      </article>
+
+      <article class="product-card kl-reveal" data-id="hoka-clifton-9" data-brand="Hoka" data-name="Clifton 9" data-price="116" data-image="https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=600&auto=format&fit=crop" data-href="shop.html">
+        <div class="product-media">
+          <span class="product-badge is-sale">Sale</span>
+          <button type="button" class="save-btn" aria-pressed="false" aria-label="Save Hoka Clifton 9">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=600&auto=format&fit=crop" alt="Hoka Clifton 9 sneaker" loading="lazy">
+          <button type="button" class="quick-add" data-product="Hoka Clifton 9">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            <span class="quick-add-label">Quick Add</span><span class="sr-only"> Hoka Clifton 9</span>
+          </button>
+        </div>
+        <div class="product-info">
+          <a class="product-link" href="shop.html">
+            <span class="product-brand">Hoka</span>
+            <span class="product-name">Clifton 9</span>
+          </a>
+          <div class="product-price on-sale">
+            <span class="sr-only">Sale price </span><span class="now">$116</span>
+            <span class="sr-only">Original price </span><s class="was">$145</s>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="trust" aria-label="Store guarantees">
+    <div class="trust-item">
+      <span class="trust-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7h11v9H3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 10h4l3 3v3h-7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="7.5" cy="18" r="1.6" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="18" r="1.6" stroke="currentColor" stroke-width="2"/></svg>
+      </span>
+      <span class="trust-text">Free Shipping Over $75</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 1 1 2.6 5.9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 8v4h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="trust-text">30-Day Easy Returns</span>
+    </div>
+    <div class="trust-item">
+      <span class="trust-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="trust-text">100% Authenticity Guaranteed</span>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">KICKS<span class="dot">.</span>LAB</a>
+        <p class="footer-tagline">Sneakers and streetwear for people who show up early to the drop.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <h3>Shop</h3>
+          <ul>
+            <li><a href="#">Men</a></li>
+            <li><a href="#">Women</a></li>
+            <li><a href="#">New Drops</a></li>
+            <li><a href="#">Sale</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Support</h3>
+          <ul>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Returns</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-newsletter">
+        <h3>Stay in the loop</h3>
+        <p>Get drop alerts before they sell out.</p>
+        <form class="newsletter-form" onsubmit="return false;">
+          <label for="footer-email" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Email address</label>
+          <input id="footer-email" type="email" placeholder="Your email" required>
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Kicks Lab. All rights reserved.</span>
+      <div class="social-icons">
+        <a href="#" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        </a>
+        <a href="#" aria-label="TikTok">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 3v11.5a3.5 3.5 0 1 1-3-3.46" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 3a5 5 0 0 0 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" aria-label="X">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 4l16 16M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <div id="cart-status" class="sr-only" role="status" aria-live="polite"></div>
+
+  <script src="store.js"></script>
+
+  <script>
+    function toggleTheme(){
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      if (window.KL && KL.setTheme) KL.setTheme(next); else root.setAttribute('data-theme', next);
+    }
+
+    (function(){
+      const grid = document.querySelector('.product-row');
+      const status = document.getElementById('cart-status');
+
+      grid.addEventListener('click', function(e){
+        const card = e.target.closest('.product-card');
+        const save = e.target.closest('.save-btn');
+        if (save && card){
+          const item = { id: card.dataset.id, brand: card.dataset.brand, name: card.dataset.name, price: parseFloat(card.dataset.price), image: card.dataset.image, href: card.dataset.href };
+          const on = KL.toggleFav(item);
+          save.setAttribute('aria-pressed', String(on));
+          save.classList.remove('pop');
+          if (on){ void save.offsetWidth; save.classList.add('pop'); }
+          status.textContent = item.brand + ' ' + item.name + (on ? ' added to favorites' : ' removed from favorites');
+          KL.toast(item.brand + ' ' + item.name + (on ? ' added to favorites.' : ' removed from favorites.'));
+          return;
+        }
+        const add = e.target.closest('.quick-add');
+        if (add && card && !add.classList.contains('added')){
+          // Quick Add uses a placeholder "One Size" — swap in a real size picker when wiring up variants.
+          const label = add.querySelector('.quick-add-label');
+          KL.addToCart({ id: card.dataset.id, brand: card.dataset.brand, name: card.dataset.name, size: 'One Size', price: parseFloat(card.dataset.price), image: card.dataset.image, href: card.dataset.href, qty: 1 });
+          status.textContent = add.dataset.product + ' added to cart';
+          KL.toast(add.dataset.product + ' added to cart.');
+          add.classList.add('added');
+          label.textContent = 'Added';
+          setTimeout(function(){
+            add.classList.remove('added');
+            label.textContent = 'Quick Add';
+          }, 1400);
+        }
+      });
+
+      // reflect saved-favorite state on load
+      document.querySelectorAll('.product-card').forEach(function(c){
+        const btn = c.querySelector('.save-btn');
+        if (btn && KL.isFav(c.dataset.id)) btn.setAttribute('aria-pressed', 'true');
+      });
+
+      // If a photo fails to load, drop it so the tile stays clean instead of showing a broken-image icon
+      grid.querySelectorAll('.product-media img').forEach(function(img){
+        const drop = function(){ img.remove(); };
+        img.addEventListener('error', drop);
+        if (img.complete && img.naturalWidth === 0) drop();
+      });
+    })();
+  </script>
+
+</body>
+</html>

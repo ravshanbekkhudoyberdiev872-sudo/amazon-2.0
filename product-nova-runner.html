@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function(){
+      try{
+        var t = localStorage.getItem('kl-theme');
+        if(t) document.documentElement.setAttribute('data-theme', t);
+      }catch(e){}
+    })();
+  </script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Runner — Kicks Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="store.css">
+<style>
+
+  a.icon-btn{ text-decoration:none; }
+  :root, :root[data-theme="dark"]{
+    --bg:#0E0E10;
+    --surface:#1A1A1D;
+    --surface-raised:#202023;
+    --border:#2C2C30;
+    --text:#F3F0E8;
+    --text-dim:#B9B6AE;
+    --accent:#FF3D1A;
+    --accent-dim:#3A1B12;
+    --accent-contrast:#0E0E10;
+    --accent-text:#FF5A3A;
+    --shadow:0 12px 28px rgba(0,0,0,0.35);
+    --radius-sm:3px;
+    --radius-pill:999px;
+    --sp-1:8px;
+    --sp-2:16px;
+    --sp-3:24px;
+    --sp-4:32px;
+    --sp-6:48px;
+    --sp-8:64px;
+    --sp-12:96px;
+  }
+
+  :root[data-theme="light"]{
+    --bg:#F7F5F0;
+    --surface:#FFFFFF;
+    --surface-raised:#FFFFFF;
+    --border:#E3DFD5;
+    --text:#161512;
+    --text-dim:#6E6A61;
+    --accent:#FF3D1A;
+    --accent-dim:#FFE1D8;
+    --accent-contrast:#0E0E10;
+    --accent-text:#D42A0A;
+    --shadow:0 12px 28px rgba(20,18,14,0.08);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    transition:background 0.2s ease, color 0.2s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+
+  :focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  .display{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    letter-spacing:0.005em;
+    line-height:0.92;
+  }
+
+  /* ---------- marquee strip ---------- */
+  .marquee{
+    background:var(--accent);
+    color:var(--accent-contrast);
+    overflow:hidden;
+    white-space:nowrap;
+    border-bottom:1px solid var(--bg);
+  }
+  .marquee-track{
+    display:inline-flex;
+    animation:scroll 22s linear infinite;
+  }
+  .marquee span{
+    font-weight:800;
+    font-size:13px;
+    letter-spacing:0.04em;
+    padding:9px var(--sp-3);
+    white-space:nowrap;
+  }
+  .marquee span::after{
+    content:"//";
+    margin-left:var(--sp-3);
+    opacity:0.55;
+  }
+  @keyframes scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* ---------- nav ---------- */
+  header.nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:var(--sp-3) var(--sp-6);
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:40;
+    background:color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter:blur(10px);
+  }
+  .logo{
+    font-family:'Anton',sans-serif;
+    font-size:22px;
+    letter-spacing:0.01em;
+    display:flex;
+    align-items:baseline;
+    gap:2px;
+  }
+  .logo .dot{color:var(--accent);transition:transform 0.2s ease;display:inline-block;}
+  .logo:hover .dot{transform:scale(1.4);}
+
+  .nav-links{
+    display:flex;
+    gap:var(--sp-6);
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  .nav-links a{
+    font-size:14px;
+    font-weight:600;
+    color:var(--text-dim);
+    position:relative;
+    padding:4px 2px;
+    transition:color 0.15s ease;
+  }
+  .nav-links a:hover{color:var(--text);}
+  .nav-links a::before{
+    content:"";
+    position:absolute;
+    left:0;right:0;
+    bottom:-2px;
+    height:2px;
+    background:var(--text-dim);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform 0.25s ease, background 0.15s ease;
+  }
+  .nav-links a:hover::before{transform:scaleX(1);}
+  .nav-links a.sale::before{background:var(--accent);}
+  .nav-links a.active{color:var(--text);}
+  .nav-links a.active::after{
+    content:"";
+    position:absolute;
+    left:0;right:0;
+    bottom:-2px;
+    height:2px;
+    background:var(--accent);
+  }
+  .nav-links a.sale{color:var(--accent);}
+  .nav-links a.sale:hover{color:#ff6a48;}
+
+  .nav-actions{
+    display:flex;
+    align-items:center;
+    gap:var(--sp-3);
+  }
+  .icon-btn{
+    background:none;
+    border:none;
+    color:var(--text);
+    padding:6px;
+    display:flex;
+    position:relative;
+    border-radius:var(--radius-sm);
+  }
+  .icon-btn:hover{color:var(--accent);}
+  .theme-toggle .icon-moon{display:none;}
+  :root[data-theme="light"] .theme-toggle .icon-sun{display:none;}
+  :root[data-theme="light"] .theme-toggle .icon-moon{display:block;}
+  .cart-badge{
+    position:absolute;
+    top:-2px;
+    right:-4px;
+    background:var(--accent);
+    color:var(--accent-contrast);
+    font-size:10px;
+    font-weight:800;
+    min-width:16px;
+    height:16px;
+    border-radius:var(--radius-pill);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0 3px;
+    border:1.5px solid var(--bg);
+  }
+
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:none;
+    color:var(--text);
+    padding:6px;
+  }
+
+  .btn-primary{
+    position:relative;
+    overflow:hidden;
+    background:var(--accent);
+    color:var(--accent-contrast);
+    border:none;
+    font-weight:800;
+    font-size:15px;
+    padding:16px 30px;
+    border-radius:var(--radius-sm);
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .btn-primary::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-60%;
+    width:40%;
+    height:100%;
+    background:linear-gradient(115deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform:skewX(-20deg);
+    transition:left 0.5s ease;
+  }
+  .btn-primary:hover::before{left:130%;}
+  .btn-primary:hover{
+    background:#ff5636;
+    transform:translateY(-2px);
+  }
+  .btn-primary:active{transform:translateY(0) scale(0.98);}
+  /* ---------- footer ---------- */
+  footer.site-footer{
+    padding:var(--sp-8) var(--sp-6) var(--sp-4);
+  }
+  .footer-top{
+    display:grid;
+    grid-template-columns:1.4fr 2fr 1.4fr;
+    gap:var(--sp-6);
+    padding-bottom:var(--sp-8);
+  }
+  .footer-brand .logo{margin-bottom:var(--sp-2);}
+  .footer-tagline{
+    font-size:14px;
+    color:var(--text-dim);
+    max-width:32ch;
+    line-height:1.5;
+  }
+  .footer-links{
+    display:flex;
+    gap:var(--sp-8);
+  }
+  .footer-col h3{
+    font-size:12px;
+    font-weight:700;
+    color:var(--text-dim);
+    margin:0 0 var(--sp-2);
+    letter-spacing:0.02em;
+  }
+  .footer-col ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:var(--sp-1);
+  }
+  .footer-col a{
+    font-size:14px;
+    font-weight:600;
+    color:var(--text);
+  }
+  .footer-col a:hover{color:var(--accent);}
+
+  .footer-newsletter h3{
+    font-size:12px;
+    font-weight:700;
+    color:var(--text-dim);
+    margin:0 0 var(--sp-2);
+    letter-spacing:0.02em;
+  }
+  .footer-newsletter p{
+    font-size:14px;
+    color:var(--text-dim);
+    margin:0 0 var(--sp-2);
+    line-height:1.5;
+  }
+  .newsletter-form{
+    display:flex;
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    overflow:hidden;
+    background:var(--surface);
+  }
+  .newsletter-form input{
+    flex:1;
+    background:none;
+    border:none;
+    color:var(--text);
+    font-family:inherit;
+    font-size:14px;
+    padding:12px 14px;
+    min-width:0;
+  }
+  .newsletter-form input::placeholder{color:var(--text-dim);}
+  .newsletter-form input:focus{outline:none;}
+  .newsletter-form button{
+    background:var(--accent);
+    color:var(--accent-contrast);
+    border:none;
+    font-weight:800;
+    font-size:13px;
+    padding:0 18px;
+    white-space:nowrap;
+  }
+  .newsletter-form button:hover{background:#ff5636;}
+
+  .footer-bottom{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:var(--sp-3);
+    padding-top:var(--sp-4);
+    border-top:1px solid var(--border);
+  }
+  .footer-copy{
+    font-size:13px;
+    color:var(--text-dim);
+  }
+  .social-icons{
+    display:flex;
+    gap:var(--sp-2);
+  }
+  .social-icons a{
+    width:34px;
+    height:34px;
+    border-radius:var(--radius-pill);
+    border:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--text);
+    transition:border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+  }
+  .social-icons a:hover{
+    border-color:var(--accent);
+    color:var(--accent);
+    transform:translateY(-2px);
+  }
+
+
+  :root{--nav-h:82px;}
+
+  .sr-only{
+    position:absolute;
+    width:1px;height:1px;
+    margin:-1px;padding:0;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+  }
+
+  /* ---------- breadcrumb ---------- */
+  .crumbs{
+    padding:var(--sp-3) var(--sp-6) 0;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text-dim);
+  }
+  .crumbs ol{
+    list-style:none;
+    margin:0;padding:0;
+    display:flex;
+    flex-wrap:wrap;
+    gap:var(--sp-1);
+  }
+  .crumbs li + li::before{content:"/";margin-right:var(--sp-1);opacity:0.5;}
+  .crumbs a:hover{color:var(--accent-text);}
+  .crumbs [aria-current]{color:var(--text);}
+
+  /* ---------- layout: sticky gallery left, scrolling details right ---------- */
+  .pdp{
+    display:grid;
+    grid-template-columns:minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap:var(--sp-8);
+    align-items:start;
+    padding:var(--sp-4) var(--sp-6) var(--sp-8);
+  }
+
+  .gallery{
+    position:sticky;
+    top:calc(var(--nav-h) + var(--sp-3));
+    display:grid;
+    grid-template-columns:72px minmax(0, 1fr);
+    gap:var(--sp-2);
+    align-items:start;
+  }
+  .rail{
+    display:flex;
+    flex-direction:column;
+    gap:var(--sp-1);
+  }
+  .thumb{
+    width:72px;
+    aspect-ratio:1/1;
+    padding:0;
+    position:relative;
+    overflow:hidden;
+    background:var(--surface-raised);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    opacity:0.68;
+    transition:opacity 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .thumb:hover{opacity:1;}
+  .thumb[aria-pressed="true"]{
+    opacity:1;
+    border-color:var(--accent);
+    box-shadow:0 0 0 1px var(--accent);
+  }
+  .thumb img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scale(var(--z, 1));
+    transform-origin:var(--x, 50%) var(--y, 50%);
+  }
+  .stage{
+    position:relative;
+    aspect-ratio:1/1;
+    max-height:calc(100dvh - var(--nav-h) - var(--sp-6));
+    background:var(--surface-raised);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    overflow:hidden;
+  }
+  .stage img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scale(var(--z, 1));
+    transform-origin:var(--x, 50%) var(--y, 50%);
+    transition:transform 0.6s cubic-bezier(0.22, 0.8, 0.3, 1), transform-origin 0.6s cubic-bezier(0.22, 0.8, 0.3, 1);
+  }
+
+  /* ---------- details column ---------- */
+  .details{
+    display:flex;
+    flex-direction:column;
+    max-width:560px;
+  }
+  .brand-link{
+    align-self:flex-start;
+    font-size:14px;
+    font-weight:700;
+    color:var(--text-dim);
+    transition:color 0.15s ease;
+  }
+  .brand-link:hover{color:var(--accent-text);}
+  .product-title{
+    margin:var(--sp-1) 0 0;
+    font-size:clamp(44px, 5vw, 68px);
+    color:var(--text);
+  }
+
+  .rating{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:var(--sp-1);
+    margin-top:var(--sp-2);
+    font-size:14px;
+  }
+  .rating-score{font-weight:800;}
+  .rating-count{
+    color:var(--text-dim);
+    font-weight:600;
+    text-decoration:underline;
+    text-underline-offset:3px;
+    text-decoration-color:color-mix(in srgb, var(--text-dim) 50%, transparent);
+  }
+  .rating-count:hover{color:var(--text);}
+
+  .stars{
+    position:relative;
+    display:inline-block;
+    line-height:0;
+    color:var(--accent);
+  }
+  .stars .row{display:flex;gap:2px;width:max-content;}
+  .stars .base{color:color-mix(in srgb, var(--text) 22%, transparent);}
+  .stars .fill{
+    position:absolute;
+    top:0;bottom:0;left:0;
+    width:var(--pct);
+    overflow:hidden;
+  }
+  .stars svg{width:18px;height:18px;flex:none;fill:currentColor;}
+
+  .price{
+    margin:var(--sp-3) 0 0;
+    font-family:'Anton',sans-serif;
+    font-size:34px;
+    line-height:1;
+    letter-spacing:0.005em;
+    color:var(--text);
+  }
+
+  /* size picker */
+  .size-block{margin-top:var(--sp-4);}
+  .size-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:var(--sp-2);
+    font-size:14px;
+    font-weight:700;
+  }
+  .size-unit{margin-left:6px;font-weight:500;color:var(--text-dim);}
+  .size-head a{
+    color:var(--text-dim);
+    font-weight:600;
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+  .size-head a:hover{color:var(--text);}
+  .size-grid{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:var(--sp-1);
+  }
+  .size-input{
+    position:absolute;
+    opacity:0;
+    pointer-events:none;
+  }
+  .size-label{
+    display:grid;
+    place-items:center;
+    min-height:48px;
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    background:var(--surface);
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+  .size-label:hover{border-color:var(--text-dim);}
+  .size-input:checked + .size-label{
+    background:var(--text);
+    color:var(--bg);
+    border-color:var(--text);
+  }
+  .size-input:focus-visible + .size-label{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+  .size-input:disabled + .size-label{
+    color:var(--text-dim);
+    opacity:0.5;
+    text-decoration:line-through;
+    cursor:not-allowed;
+    background:none;
+  }
+  .size-input:disabled + .size-label:hover{border-color:var(--border);}
+  .size-grid.invalid .size-label:not(:hover){border-color:var(--accent-text);}
+  .size-error{
+    margin:var(--sp-2) 0 0;
+    font-size:13px;
+    font-weight:600;
+    color:var(--accent-text);
+  }
+
+  /* cta */
+  .cta-row{
+    display:flex;
+    gap:var(--sp-1);
+    margin-top:var(--sp-3);
+  }
+  .cta-row .btn-primary{
+    flex:1;
+    height:56px;
+    padding:0 var(--sp-3);
+    font-size:17px;
+  }
+  .save-lg{
+    width:56px;
+    height:56px;
+    padding:0;
+    display:grid;
+    place-items:center;
+    background:none;
+    color:var(--text);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    transition:border-color 0.15s ease, color 0.15s ease;
+  }
+  .save-lg svg{display:block;}
+  .save-lg svg path{
+    fill:transparent;
+    stroke:currentColor;
+    stroke-width:2;
+    stroke-linejoin:round;
+    transition:fill 0.15s ease;
+  }
+  .save-lg:hover{border-color:var(--accent);color:var(--accent-text);}
+  .save-lg[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);}
+  .save-lg[aria-pressed="true"] svg path{fill:currentColor;}
+  .save-lg.pop svg{animation:heartPop 0.35s ease;}
+  @keyframes heartPop{
+    0%{transform:scale(1);}
+    40%{transform:scale(1.3);}
+    100%{transform:scale(1);}
+  }
+
+  /* accordions */
+  .info{margin-top:var(--sp-6);}
+  .acc{border-top:1px solid var(--border);}
+  .acc:last-child{border-bottom:1px solid var(--border);}
+  .acc summary{
+    list-style:none;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:var(--sp-2) 0;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .acc summary::-webkit-details-marker{display:none;}
+  .acc summary:hover{color:var(--accent-text);}
+  .acc .chev{transition:transform 0.2s ease;flex:none;}
+  .acc[open] .chev{transform:rotate(180deg);}
+  .acc-body{
+    padding:0 0 var(--sp-3);
+    font-size:15px;
+    line-height:1.6;
+    color:var(--text-dim);
+    max-width:56ch;
+  }
+  .acc-body p{margin:0;}
+  .specs{
+    display:grid;
+    grid-template-columns:max-content 1fr;
+    gap:var(--sp-1) var(--sp-3);
+    margin:0;
+  }
+  .specs dt{font-weight:600;color:var(--text);}
+  .specs dd{margin:0;}
+
+  /* ---------- reviews ---------- */
+  .reviews{
+    padding:var(--sp-8) var(--sp-6);
+    border-top:1px solid var(--border);
+    scroll-margin-top:var(--nav-h);
+  }
+  .section-title{
+    margin:0 0 var(--sp-6);
+    font-size:clamp(28px, 3.4vw, 40px);
+    color:var(--text);
+  }
+  .reviews-grid{
+    display:grid;
+    grid-template-columns:minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap:var(--sp-8);
+    align-items:start;
+  }
+  .score-row{display:flex;align-items:flex-end;gap:var(--sp-2);}
+  .score{
+    margin:0;
+    font-size:88px;
+    color:var(--text);
+  }
+  .score-meta{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding-bottom:6px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--text-dim);
+  }
+  .bars{
+    list-style:none;
+    margin:var(--sp-4) 0 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:var(--sp-1);
+    max-width:420px;
+  }
+  .bars li{
+    display:grid;
+    grid-template-columns:52px 1fr 36px;
+    align-items:center;
+    gap:var(--sp-2);
+    font-size:13px;
+    font-weight:600;
+    color:var(--text-dim);
+  }
+  .bars .count{text-align:right;}
+  .bar{
+    height:8px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    overflow:hidden;
+  }
+  .bar span{display:block;height:100%;background:var(--accent);}
+
+  .review{
+    padding:var(--sp-3) 0;
+    border-top:1px solid var(--border);
+    display:flex;
+    flex-direction:column;
+    gap:var(--sp-1);
+  }
+  .review:first-child{padding-top:0;border-top:none;}
+  .review-title{margin:0;font-size:16px;font-weight:700;color:var(--text);}
+  .review p{margin:0;font-size:15px;line-height:1.6;color:var(--text-dim);max-width:60ch;}
+  .review-by{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:var(--sp-1) var(--sp-2);
+    margin-top:4px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text-dim);
+  }
+  .review-by strong{color:var(--text);}
+  .verified{display:inline-flex;align-items:center;gap:4px;}
+  .verified svg{color:var(--accent);}
+
+
+  /* confirmation state shared by both Add to Cart buttons */
+  .btn-primary.added{background:var(--text);color:var(--bg);}
+
+  /* quantity + stock */
+  .qty-row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:var(--sp-1) var(--sp-3);
+    margin-top:var(--sp-3);
+  }
+  .qty{display:flex;align-items:center;gap:var(--sp-2);}
+  .qty-label{font-size:14px;font-weight:700;}
+  .stepper{
+    display:inline-flex;
+    align-items:stretch;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    overflow:hidden;
+  }
+  .step-btn{
+    width:44px;
+    height:44px;
+    display:grid;
+    place-items:center;
+    padding:0;
+    background:none;
+    border:none;
+    color:var(--text);
+    transition:background 0.15s ease;
+  }
+  .step-btn:hover:not(:disabled){background:color-mix(in srgb, var(--text) 8%, transparent);}
+  .step-btn:disabled{opacity:0.35;cursor:not-allowed;}
+  .step-btn:focus-visible{outline-offset:-3px;}
+  .qty-input{
+    width:48px;
+    padding:0;
+    text-align:center;
+    background:none;
+    border:none;
+    border-left:1px solid var(--border);
+    border-right:1px solid var(--border);
+    color:var(--text);
+    font-family:inherit;
+    font-size:15px;
+    font-weight:700;
+    -moz-appearance:textfield;
+    appearance:textfield;
+  }
+  .qty-input::-webkit-outer-spin-button,
+  .qty-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
+  .qty-input:focus-visible{outline-offset:-3px;}
+
+  .stock{
+    margin:0;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-height:44px;
+    font-size:14px;
+    font-weight:600;
+    color:var(--text-dim);
+  }
+  .stock::before{
+    content:"";
+    width:8px;height:8px;
+    flex:none;
+    border-radius:var(--radius-pill);
+    background:currentColor;
+    opacity:0.6;
+  }
+  .stock.none::before{display:none;}
+  .stock.low{color:var(--accent-text);font-weight:700;}
+  .stock.low::before{background:var(--accent);opacity:1;}
+
+  /* sticky add to cart bar: appears once the main button scrolls out of view */
+  .buybar{
+    position:fixed;
+    left:0;right:0;bottom:0;
+    z-index:50;
+    background:color-mix(in srgb, var(--bg) 92%, transparent);
+    -webkit-backdrop-filter:blur(10px);
+    backdrop-filter:blur(10px);
+    border-top:1px solid var(--border);
+    transform:translateY(100%);
+    visibility:hidden;
+    transition:transform 0.3s cubic-bezier(0.22, 0.8, 0.3, 1), visibility 0s linear 0.3s;
+  }
+  .buybar.show{
+    transform:translateY(0);
+    visibility:visible;
+    transition:transform 0.3s cubic-bezier(0.22, 0.8, 0.3, 1), visibility 0s;
+  }
+  .buybar-inner{
+    display:grid;
+    grid-template-columns:minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap:var(--sp-8);
+    padding:var(--sp-2) var(--sp-6);
+  }
+  .buybar-content{
+    grid-column:2;
+    max-width:560px;
+    display:flex;
+    align-items:center;
+    gap:var(--sp-3);
+  }
+  .buybar-info{
+    flex:1;
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .buybar-name{font-size:15px;font-weight:700;}
+  .buybar-meta{
+    display:flex;
+    gap:var(--sp-2);
+    font-size:13px;
+    font-weight:600;
+    color:var(--text-dim);
+  }
+  .buybar .btn-primary{
+    height:52px;
+    min-width:190px;
+    padding:0 var(--sp-3);
+    font-size:16px;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:900px){
+    .nav-links{
+      position:absolute;
+      top:100%;left:0;right:0;
+      background:var(--bg);
+      flex-direction:column;
+      gap:0;
+      border-bottom:1px solid var(--border);
+      display:none;
+    }
+    .nav-links.open{display:flex;}
+    .nav-links a{padding:var(--sp-2) var(--sp-6);width:100%;}
+    .nav-links a.active::after{display:none;}
+    .nav-toggle{display:block;}
+
+    .crumbs{padding:var(--sp-2) var(--sp-4) 0;}
+    .pdp{
+      grid-template-columns:1fr;
+      gap:var(--sp-4);
+      padding:var(--sp-2) var(--sp-4) var(--sp-6);
+    }
+    .gallery{
+      position:static;
+      grid-template-columns:1fr;
+    }
+    .stage{order:-1;max-height:none;}
+    .rail{flex-direction:row;}
+    .thumb{width:auto;flex:1;}
+    .details{max-width:none;}
+
+    .buybar-inner{grid-template-columns:1fr;padding:12px var(--sp-4);}
+    .buybar-content{grid-column:1;max-width:none;gap:var(--sp-2);}
+    .buybar .btn-primary{min-width:150px;}
+
+    .reviews{padding:var(--sp-6) var(--sp-4);}
+    .reviews-grid{grid-template-columns:1fr;gap:var(--sp-6);}
+    .score{font-size:72px;}
+
+    .footer-top{grid-template-columns:1fr;gap:var(--sp-6);}
+    .footer-links{gap:var(--sp-4);}
+    .footer-bottom{flex-direction:column;align-items:flex-start;gap:var(--sp-3);}
+  }
+</style>
+</head>
+<body>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>NEW DROP — SATURDAY 9AM ET</span>
+      <span>LIMITED TO 400 PAIRS</span>
+      <span>MEMBERS GET EARLY ACCESS</span>
+      <span>NEW DROP — SATURDAY 9AM ET</span>
+      <span>LIMITED TO 400 PAIRS</span>
+      <span>MEMBERS GET EARLY ACCESS</span>
+    </div>
+  </div>
+
+  <header class="nav">
+    <a href="index.html" class="logo">KICKS<span class="dot">.</span>LAB</a>
+
+    <button class="nav-toggle" aria-label="Toggle menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+
+    <!--
+      Department links point to the Shop page with a `dept` query param
+      (men / women / new / sale). shop.html doesn't read this param yet —
+      when wiring up real filtering, parse it on load and pre-check the
+      matching Brand/Category filter(s) plus update the results count.
+    -->
+    <ul class="nav-links">
+      <li><a href="shop.html?dept=men">Men</a></li>
+      <li><a href="shop.html?dept=women">Women</a></li>
+      <li><a href="shop.html?dept=new">New Drops</a></li>
+      <li><a href="shop.html?dept=sale" class="sale">Sale</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="icon-btn theme-toggle" aria-label="Toggle light and dark mode" onclick="toggleTheme()">
+        <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="2"/><path d="M12 2.5v2.5M12 19v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12H5M19 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="account-wrap">
+        <button class="icon-btn account-btn" id="account-btn" aria-haspopup="true" aria-expanded="false" aria-label="Account">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8.2" r="3.6" stroke="currentColor" stroke-width="2"/><path d="M4.4 19.6c1.3-3.9 4.1-5.9 7.6-5.9s6.3 2 7.6 5.9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="account-panel" id="account-panel" hidden></div>
+      </div>
+      <a href="favorites.html" class="icon-btn" aria-label="Favorites, 0 items">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        <span class="fav-badge">0</span>
+      </a>
+      <a href="cart.html" class="icon-btn" aria-label="Cart, 0 items">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 8h12l-1.2 10.2a2 2 0 01-2 1.8H9.2a2 2 0 01-2-1.8L6 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 8V6a3 3 0 016 0v2" stroke="currentColor" stroke-width="2"/></svg>
+        <span class="cart-badge">0</span>
+      </a>
+    </div>
+  </header>
+
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8L12 2.5z"/></symbol>
+  </svg>
+
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href="shop.html">Shop</a></li>
+      <li><a href="shop.html?category=running">Running</a></li>
+      <li aria-current="page">Nova Runner</li>
+    </ol>
+  </nav>
+
+  <main>
+    <div class="pdp">
+      <div class="gallery" aria-label="Nova Runner photos">
+        <div class="rail">
+        <button type="button" class="thumb" aria-pressed="true" aria-label="View 1 of 4" data-full="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1400&auto=format&fit=crop" data-alt="Nova Runner, main view" data-z="1.0" data-x="50%" data-y="50%">
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300&auto=format&fit=crop" alt="" style="--z:1.0;--x:50%;--y:50%">
+        </button>
+        <button type="button" class="thumb" aria-pressed="false" aria-label="View 2 of 4" data-full="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1400&auto=format&fit=crop" data-alt="Nova Runner, close-up of the toe" data-z="1.7" data-x="25%" data-y="65%">
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300&auto=format&fit=crop" alt="" style="--z:1.7;--x:25%;--y:65%">
+        </button>
+        <button type="button" class="thumb" aria-pressed="false" aria-label="View 3 of 4" data-full="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1400&auto=format&fit=crop" data-alt="Nova Runner, close-up of the heel" data-z="1.7" data-x="78%" data-y="45%">
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300&auto=format&fit=crop" alt="" style="--z:1.7;--x:78%;--y:45%">
+        </button>
+        <button type="button" class="thumb" aria-pressed="false" aria-label="View 4 of 4" data-full="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1400&auto=format&fit=crop" data-alt="Nova Runner, close-up of the upper" data-z="1.9" data-x="50%" data-y="30%">
+          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=300&auto=format&fit=crop" alt="" style="--z:1.9;--x:50%;--y:30%">
+        </button>
+        </div>
+        <div class="stage">
+          <img id="main-img" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1400&auto=format&fit=crop" alt="Nova Runner, main view" fetchpriority="high" style="--z:1;--x:50%;--y:50%">
+        </div>
+      </div>
+
+      <div class="details">
+        <a href="shop.html?brand=rvlt" class="brand-link">RVLT</a>
+        <h1 class="product-title display">Nova Runner</h1>
+
+        <div class="rating">
+          <span class="stars" style="--pct:91.1%" role="img" aria-label="Rated 4.6 out of 5 stars"><span class="row base" aria-hidden="true"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></span><span class="fill" aria-hidden="true"><span class="row"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></span></span></span>
+          <span class="rating-score">4.6</span>
+          <a href="#reviews" class="rating-count">218 reviews</a>
+        </div>
+
+        <p class="price"><span class="sr-only">Price </span>$140</p>
+
+        <div class="size-block">
+          <div class="size-head">
+            <span id="size-label">Size<span class="size-unit">US men's</span></span>
+            <a href="#">Size Guide</a>
+          </div>
+          <div class="size-grid" id="size-grid" role="radiogroup" aria-labelledby="size-label" aria-describedby="size-error">
+          <input type="radio" name="size" id="s6" value="6" data-stock="9" class="size-input"><label for="s6" class="size-label">6</label>
+          <input type="radio" name="size" id="s6-5" value="6.5" data-stock="12" class="size-input"><label for="s6-5" class="size-label">6.5</label>
+          <input type="radio" name="size" id="s7" value="7" data-stock="14" class="size-input"><label for="s7" class="size-label">7</label>
+          <input type="radio" name="size" id="s7-5" value="7.5" data-stock="6" class="size-input"><label for="s7-5" class="size-label">7.5</label>
+          <input type="radio" name="size" id="s8" value="8" data-stock="10" class="size-input"><label for="s8" class="size-label">8</label>
+          <input type="radio" name="size" id="s8-5" value="8.5" data-stock="0" class="size-input" disabled><label for="s8-5" class="size-label">8.5<span class="sr-only">, sold out</span></label>
+          <input type="radio" name="size" id="s9" value="9" data-stock="3" class="size-input"><label for="s9" class="size-label">9</label>
+          <input type="radio" name="size" id="s9-5" value="9.5" data-stock="11" class="size-input"><label for="s9-5" class="size-label">9.5</label>
+          <input type="radio" name="size" id="s10" value="10" data-stock="7" class="size-input"><label for="s10" class="size-label">10</label>
+          <input type="radio" name="size" id="s10-5" value="10.5" data-stock="2" class="size-input"><label for="s10-5" class="size-label">10.5</label>
+          <input type="radio" name="size" id="s11" value="11" data-stock="8" class="size-input"><label for="s11" class="size-label">11</label>
+          <input type="radio" name="size" id="s11-5" value="11.5" data-stock="0" class="size-input" disabled><label for="s11-5" class="size-label">11.5<span class="sr-only">, sold out</span></label>
+          <input type="radio" name="size" id="s12" value="12" data-stock="4" class="size-input"><label for="s12" class="size-label">12</label>
+          <input type="radio" name="size" id="s12-5" value="12.5" data-stock="8" class="size-input"><label for="s12-5" class="size-label">12.5</label>
+          <input type="radio" name="size" id="s13" value="13" data-stock="6" class="size-input"><label for="s13" class="size-label">13</label>
+          </div>
+          <p class="size-error" id="size-error" role="alert" hidden>Select a size to add the Nova Runner to your cart.</p>
+        </div>
+
+        <div class="qty-row">
+          <div class="qty">
+            <span class="qty-label" id="qty-label">Quantity</span>
+            <div class="stepper" role="group" aria-labelledby="qty-label">
+              <button type="button" class="step-btn" id="qty-dec" aria-label="Decrease quantity" disabled><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></button>
+              <input class="qty-input" id="qty" type="number" inputmode="numeric" min="1" max="10" value="1" aria-labelledby="qty-label">
+              <button type="button" class="step-btn" id="qty-inc" aria-label="Increase quantity"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></button>
+            </div>
+          </div>
+          <p class="stock none" id="stock" role="status" aria-live="polite">Select a size to see availability</p>
+        </div>
+
+        <div class="cta-row">
+          <button type="button" class="btn-primary" id="add-to-cart">Add to Cart</button>
+          <button type="button" class="save-lg" id="save-btn" aria-pressed="false" aria-label="Save Nova Runner"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+        </div>
+
+        <div class="info">
+          <details class="acc" open>
+            <summary>Description<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+            <div class="acc-body">
+              <p>A daily trainer built around a bouncy foam midsole and a breathable mesh upper. Reflective overlays pick up headlights after dark, so the same pair works for the 6am run and the walk home.</p>
+            </div>
+          </details>
+          <details class="acc" open>
+            <summary>Details<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+            <div class="acc-body">
+              <dl class="specs">
+                <dt>Upper</dt><dd>Engineered mesh with reflective overlays</dd>
+                <dt>Midsole</dt><dd>Rebound foam</dd>
+                <dt>Outsole</dt><dd>Rubber with flex grooves</dd>
+                <dt>Drop</dt><dd>8 mm</dd>
+                <dt>Best for</dt><dd>Daily training and easy miles</dd>
+              </dl>
+            </div>
+          </details>
+          <details class="acc">
+            <summary>Fit and sizing<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+            <div class="acc-body">
+              <p>True to size. If you're between sizes or have wider feet, go up half a size.</p>
+            </div>
+          </details>
+          <details class="acc">
+            <summary>Shipping and returns<svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+            <div class="acc-body">
+              <p>Free shipping on orders over $75. Return unworn pairs within 30 days. Every pair is 100% authenticity guaranteed.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+
+    <section class="reviews" id="reviews" aria-labelledby="reviews-title">
+      <h2 class="section-title display" id="reviews-title">Reviews</h2>
+      <div class="reviews-grid">
+        <div>
+          <div class="score-row">
+            <p class="score display">4.6</p>
+            <div class="score-meta">
+              <span class="stars" style="--pct:91.1%" role="img" aria-label="Rated 4.6 out of 5 stars"><span class="row base" aria-hidden="true"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></span><span class="fill" aria-hidden="true"><span class="row"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></span></span></span>
+              <span>Based on 218 reviews</span>
+            </div>
+          </div>
+          <ul class="bars" aria-label="Reviews by star rating">
+          <li><span>5 stars</span><div class="bar"><span style="width:71.1%"></span></div><span class="count">155</span></li>
+          <li><span>4 stars</span><div class="bar"><span style="width:18.8%"></span></div><span class="count">41</span></li>
+          <li><span>3 stars</span><div class="bar"><span style="width:6.0%"></span></div><span class="count">13</span></li>
+          <li><span>2 stars</span><div class="bar"><span style="width:2.8%"></span></div><span class="count">6</span></li>
+          <li><span>1 stars</span><div class="bar"><span style="width:1.4%"></span></div><span class="count">3</span></li>
+          </ul>
+        </div>
+        <div>
+        <article class="review">
+          <span class="stars" style="--pct:100%" role="img" aria-label="Rated 5 out of 5 stars"><span class="row base" aria-hidden="true"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></span><span class="fill" aria-hidden="true"><span class="row"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></span></span></span>
+          <h3 class="review-title">Best daily trainer I've owned</h3>
+          <p>Put 60 miles on them in the first two weeks and they still feel fresh. The foam has real bounce without feeling mushy, and the reflective overlays light up on early morning runs.</p>
+          <div class="review-by"><strong>Marcus T.</strong><span class="verified"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Verified buyer</span><time>Sep 2, 2026</time></div>
+        </article>
+        <article class="review">
+          <span class="stars" style="--pct:80%" role="img" aria-label="Rated 4 out of 5 stars"><span class="row base" aria-hidden="true"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></span><span class="fill" aria-hidden="true"><span class="row"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></span></span></span>
+          <h3 class="review-title">Great, but size up half</h3>
+          <p>Comfortable straight out of the box and better looking in person. The toe box runs a touch snug, so go up half a size if you have wider feet.</p>
+          <div class="review-by"><strong>Priya S.</strong><span class="verified"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Verified buyer</span><time>Aug 21, 2026</time></div>
+        </article>
+        <article class="review">
+          <span class="stars" style="--pct:100%" role="img" aria-label="Rated 5 out of 5 stars"><span class="row base" aria-hidden="true"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></span><span class="fill" aria-hidden="true"><span class="row"><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg><svg aria-hidden="true"><use href="#i-star"/></svg></span></span></span>
+          <h3 class="review-title">Looks as good as it runs</h3>
+          <p>Wore them to the office and on a 10K in the same week. The colorway got compliments both times.</p>
+          <div class="review-by"><strong>Dana R.</strong><span class="verified"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>Verified buyer</span><time>Aug 9, 2026</time></div>
+        </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">KICKS<span class="dot">.</span>LAB</a>
+        <p class="footer-tagline">Sneakers and streetwear for people who show up early to the drop.</p>
+      </div>
+
+      <div class="footer-links">
+        <div class="footer-col">
+          <h3>Shop</h3>
+          <ul>
+            <li><a href="#">Men</a></li>
+            <li><a href="#">Women</a></li>
+            <li><a href="#">New Drops</a></li>
+            <li><a href="#">Sale</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Support</h3>
+          <ul>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Returns</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-newsletter">
+        <h3>Stay in the loop</h3>
+        <p>Get drop alerts before they sell out.</p>
+        <form class="newsletter-form" onsubmit="return false;">
+          <label for="footer-email" class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">Email address</label>
+          <input id="footer-email" type="email" placeholder="Your email" required>
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Kicks Lab. All rights reserved.</span>
+      <div class="social-icons">
+        <a href="#" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+        </a>
+        <a href="#" aria-label="TikTok">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M14 3v11.5a3.5 3.5 0 1 1-3-3.46" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 3a5 5 0 0 0 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#" aria-label="X">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 4l16 16M20 4L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+
+  <div class="buybar" id="buybar">
+    <div class="buybar-inner">
+      <div class="buybar-content">
+        <div class="buybar-info">
+          <span class="buybar-name">Nova Runner</span>
+          <span class="buybar-meta"><span>$140</span><span id="buybar-size">Select a size</span></span>
+        </div>
+        <button type="button" class="btn-primary" id="add-to-cart-bar">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cart-status" class="sr-only" role="status" aria-live="polite"></div>
+
+  <script src="store.js"></script>
+
+  <script>
+    function toggleTheme(){
+      const root = document.documentElement;
+      const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      if (window.KL && KL.setTheme) KL.setTheme(next); else root.setAttribute('data-theme', next);
+    }
+
+    (function(){
+      /* ---- gallery ---- */
+      const thumbs = Array.from(document.querySelectorAll('.thumb'));
+      const main = document.getElementById('main-img');
+      thumbs.forEach(function(t){
+        t.addEventListener('click', function(){
+          thumbs.forEach(function(b){ b.setAttribute('aria-pressed', String(b === t)); });
+          main.alt = t.dataset.alt;
+          // With real photos, each thumb carries its own data-full; the swap below handles it.
+          if (main.getAttribute('src') !== t.dataset.full) main.src = t.dataset.full;
+          main.style.setProperty('--z', t.dataset.z);
+          main.style.setProperty('--x', t.dataset.x);
+          main.style.setProperty('--y', t.dataset.y);
+        });
+      });
+
+      /* ---- save ---- */
+      const save = document.getElementById('save-btn');
+      const favItem = { id: 'nova-runner', brand: 'RVLT', name: 'Nova Runner', price: 140, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop', href: location.pathname.split('/').pop() };
+      if (KL.isFav(favItem.id)) save.setAttribute('aria-pressed', 'true');
+      save.addEventListener('click', function(){
+        const on = KL.toggleFav(favItem);
+        save.setAttribute('aria-pressed', String(on));
+        save.classList.remove('pop');
+        if (on){ void save.offsetWidth; save.classList.add('pop'); }
+        KL.toast((on ? 'Added to' : 'Removed from') + ' favorites: Nova Runner.');
+      });
+
+      /* ---- size, quantity, stock ---- */
+      const grid = document.getElementById('size-grid');
+      const sizeBlock = document.querySelector('.size-block');
+      const err = document.getElementById('size-error');
+      const qtyInput = document.getElementById('qty');
+      const dec = document.getElementById('qty-dec');
+      const inc = document.getElementById('qty-inc');
+      const stock = document.getElementById('stock');
+      const barSize = document.getElementById('buybar-size');
+      const MAX_PER_ORDER = 10;
+      const LOW_STOCK = 5;
+      let maxQty = MAX_PER_ORDER;
+
+      function selectedSize(){ return grid.querySelector('input[name="size"]:checked'); }
+
+      function syncQty(){
+        let q = parseInt(qtyInput.value, 10);
+        if (!q || q < 1) q = 1;
+        q = Math.min(q, maxQty);
+        qtyInput.value = q;
+        qtyInput.max = maxQty;
+        dec.disabled = q <= 1;
+        inc.disabled = q >= maxQty;
+      }
+
+      function syncStock(){
+        const size = selectedSize();
+        if (!size){
+          maxQty = MAX_PER_ORDER;
+          stock.className = 'stock none';
+          stock.textContent = 'Select a size to see availability';
+          barSize.textContent = 'Select a size';
+        } else {
+          const left = parseInt(size.dataset.stock, 10);
+          maxQty = Math.min(left, MAX_PER_ORDER);
+          if (left <= LOW_STOCK){
+            stock.className = 'stock low';
+            stock.textContent = 'Only ' + left + ' left in this size!';
+          } else {
+            stock.className = 'stock ok';
+            stock.textContent = 'In stock';
+          }
+          barSize.textContent = 'Size ' + size.value;
+        }
+        syncQty();
+      }
+
+      grid.addEventListener('change', function(){
+        err.hidden = true;
+        grid.classList.remove('invalid');
+        syncStock();
+      });
+      dec.addEventListener('click', function(){ qtyInput.value = (parseInt(qtyInput.value, 10) || 1) - 1; syncQty(); });
+      inc.addEventListener('click', function(){ qtyInput.value = (parseInt(qtyInput.value, 10) || 1) + 1; syncQty(); });
+      qtyInput.addEventListener('change', syncQty);
+      syncStock();
+
+      /* ---- add to cart (inline button + sticky bar button share one handler) ---- */
+      const cta = document.getElementById('add-to-cart');
+      const ctaBar = document.getElementById('add-to-cart-bar');
+      const buttons = [cta, ctaBar];
+      const status = document.getElementById('cart-status');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let busy = false;
+
+      function addToCart(fromBar){
+        const size = selectedSize();
+        if (!size){
+          err.hidden = false;
+          grid.classList.add('invalid');
+          if (fromBar) sizeBlock.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+          const first = grid.querySelector('input:not(:disabled)');
+          if (first) first.focus({ preventScroll: !!fromBar });
+          return;
+        }
+        if (busy) return;
+        busy = true;
+        const qty = parseInt(qtyInput.value, 10) || 1;
+        KL.addToCart({ id: 'nova-runner', brand: 'RVLT', name: 'Nova Runner', size: size.value, price: 140, image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=600&auto=format&fit=crop', href: location.pathname.split('/').pop(), qty: qty });
+        status.textContent = (qty > 1 ? qty + ' × ' : '') + 'Nova Runner, size ' + size.value + ', added to cart';
+        KL.toast((qty > 1 ? qty + '\u00d7 ' : '') + 'Nova Runner (size ' + size.value + ') added to cart.');
+        buttons.forEach(function(b){
+          b.classList.add('added');
+          b.innerHTML = 'Added <span aria-hidden="true">\u2713</span>';
+        });
+        setTimeout(function(){
+          buttons.forEach(function(b){
+            b.classList.remove('added');
+            b.textContent = 'Add to Cart';
+          });
+          busy = false;
+        }, 1800);
+      }
+      cta.addEventListener('click', function(){ addToCart(false); });
+      ctaBar.addEventListener('click', function(){ addToCart(true); });
+
+      /* ---- sticky bar: show while the main button is off screen, hide at the footer ---- */
+      const bar = document.getElementById('buybar');
+      const ctaRow = document.querySelector('.cta-row');
+      const footer = document.querySelector('footer.site-footer');
+      if ('IntersectionObserver' in window){
+        let ctaVisible = true, footerVisible = false;
+        const update = function(){ bar.classList.toggle('show', !ctaVisible && !footerVisible); };
+        // top margin keeps the sticky nav from counting as visible screen; bar shows once under half the button is in view
+        new IntersectionObserver(function(es){ ctaVisible = es[0].intersectionRatio >= 0.5; update(); }, { rootMargin: '-90px 0px 0px 0px', threshold: [0, 0.5, 1] }).observe(ctaRow);
+        new IntersectionObserver(function(es){ footerVisible = es[0].isIntersecting; update(); }).observe(footer);
+      }
+
+      /* ---- if the photo fails to load, drop it so tiles stay clean ---- */
+      document.querySelectorAll('.stage img, .thumb img').forEach(function(img){
+        const drop = function(){ img.remove(); };
+        img.addEventListener('error', drop);
+        if (img.complete && img.naturalWidth === 0) drop();
+      });
+    })();
+  </script>
+
+</body>
+</html>
